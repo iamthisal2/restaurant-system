@@ -1,0 +1,78 @@
+.foodtags-card {
+  max-width: 400px;
+  margin: 60px auto;
+  padding: 30px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  font-family: "Outfit", sans-serif;
+  color: #333;
+  text-align: center;
+}
+
+.foodtags-card h2 {
+  margin-bottom: 20px;
+}
+
+.tag-add {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.tag-add input {
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.tag-add button {
+  padding: 8px 15px;
+  background: #FF4C24;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.tag-add button:hover {
+  background: #e5533c;
+}
+
+.tag-list {
+  list-style: none;
+  padding: 0;
+}
+
+.tag-list li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.tag-text {
+  flex: 1;        /* takes available space */
+  text-align: left;
+}
+
+.tag-list input.edit-input {
+  flex: 1;        /* same width as text */
+  padding: 5px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.tag-list button {
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: 1px solid #FF4C24;
+  background: white;
+  color: #FF4C24;
+  cursor: pointer;
+}
+
+.tag-list button:hover {
+  background: #fff4f2;
+}

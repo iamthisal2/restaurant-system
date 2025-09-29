@@ -1,0 +1,151 @@
+/* Auth Card */
+.auth-card {
+  max-width: 360px;      /* responsive width */
+  width: 90%;
+  margin: 60px auto;
+  padding: 40px 25px;
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  border: 1px solid #ddd; /* professional light gray border */
+  text-align: center;
+  font-family: "Outfit", sans-serif;
+  color: #808080;
+}
+
+.auth-card h2 {
+  color: black;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Input fields */
+.auth-card input {
+  width: 100%;
+  max-width: 280px;
+  margin: 0 auto 15px auto;
+  padding: 10px;
+  border: 1px solid #C9C9C9;
+  border-radius: 4px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  display: block;
+}
+
+.auth-card input:focus {
+  border-color: #FF4C24;
+  box-shadow: 0 0 0 3px rgba(255, 76, 36, 0.2);
+}
+
+/* Buttons */
+.auth-card button {
+  padding: 10px 50px;
+  border: none;
+  border-radius: 4px;
+  color: white;
+  background-color: #FF4C24;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: block;
+  margin: 15px auto 0 auto;
+}
+
+.auth-card button:hover {
+  background-color: #e5533c;
+}
+
+/* Message text */
+.auth-card .message {
+  margin-top: 12px;
+  font-size: 14px;
+}
+
+.auth-card .message:empty {
+  display: none;
+}
+
+.auth-card .message.success {
+  color: #28a745;
+}
+
+.auth-card .message.error {
+  color: #FF4C24;
+}
+
+/* Profile page styling */
+.profile {
+  max-width: 360px;
+  width: 90%;
+  margin: 60px auto;
+  padding: 45px 35px;
+  background: #ffffff;
+  border-radius: 8px;
+  border: 1px solid #ddd; /* professional light gray border */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  font-family: "Outfit", sans-serif;
+  color: #808080;
+}
+
+.profile h2 {
+  color: black;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.profile p {
+  margin: 8px 0;
+  color: #808080;
+}
+
+/* Profile action buttons container */
+.profile-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  width: 100%;
+  max-width: 280px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Update Profile (left) */
+.profile-actions .update-btn {
+  padding: 10px 20px;
+  background: #FF4C24;
+  color: white;
+  border-radius: 4px;
+  text-decoration: none;
+  text-align: center;
+  font-weight: 500;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.profile-actions .update-btn:hover {
+  background-color: #e5533c;
+}
+
+/* Delete Account (right) */
+.profile-actions .delete-btn {
+  padding: 10px 20px;
+  background: #ffffff;
+  color: #FF4C24;
+  border: 1px solid #FF4C24;
+  border-radius: 4px;
+  font-weight: 500;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.profile-actions .delete-btn:hover {
+  background-color: #fff4f2;
+}
