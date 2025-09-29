@@ -44,7 +44,7 @@ export default function Login() {
 
       <p className="message">{msg}</p>
 
-      {/* Add this link for users without an account */}
+      {/* Link for users without an account */}
       <p>
         Don't have an account? <Link to="/register">Register</Link>
       </p>
