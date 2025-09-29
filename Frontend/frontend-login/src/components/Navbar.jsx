@@ -26,7 +26,7 @@ export default function Navbar() {
         <Link to="/">Home</Link>
         <Link to="/menu">Menu</Link>
         <Link to="/contact">Contact</Link>
-        <Link to="/food-tags">Food Tags</Link>
+        <Link to="/food-tags">Wishlist</Link>
         {user?.role === "ADMIN" && <Link to="/admin">Admin</Link>}
       </div>
 
