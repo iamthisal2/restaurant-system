@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { loginUser } from "../api";
 import { useAuth } from "../context/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom"; // <-- import Link
 import "./Auth.css";
 
 export default function Login() {
@@ -43,6 +43,11 @@ export default function Login() {
       </form>
 
       <p className="message">{msg}</p>
+
+      {/* Add this link for users without an account */}
+      <p>
+        Don't have an account? <Link to="/register">Register</Link>
+      </p>
     </div>
   );
 }
