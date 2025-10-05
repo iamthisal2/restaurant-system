@@ -1,0 +1,89 @@
+/* --- Side Panel Styles --- */
+.feedback-panel-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  animation: fadeIn 0.3s;
+}
+
+.feedback-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 450px;
+  max-width: 90%;
+  height: 100%;
+  background-color: white;
+  box-shadow: -4px 0 15px rgba(0, 0, 0, 0.1);
+  z-index: 1001;
+  display: flex;
+  flex-direction: column;
+  animation: slideIn 0.3s ease-out;
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid #eee;
+}
+
+.panel-header h2 {
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+
+.close-btn {
+  font-size: 2.2rem;
+  color: #888;
+  cursor: pointer;
+  line-height: 1;
+  font-weight: 300;
+}
+.close-btn:hover {
+  color: #000;
+}
+
+.panel-content {
+  padding: 1.5rem;
+  overflow-y: auto; /* Makes the content scrollable */
+  flex-grow: 1;
+}
+
+.panel-feedback-item {
+  border-bottom: 1px solid #f0f0f0;
+  padding: 1.2rem 0;
+}
+.panel-feedback-item:last-child {
+  border-bottom: none;
+}
+.panel-feedback-item h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #333;
+}
+.panel-feedback-item .rating {
+  font-size: 0.9rem;
+  color: #555;
+  margin: 0.25rem 0;
+}
+.panel-feedback-item .content {
+  font-style: italic;
+  color: #444;
+}
+
+/* --- Animations --- */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideIn {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
