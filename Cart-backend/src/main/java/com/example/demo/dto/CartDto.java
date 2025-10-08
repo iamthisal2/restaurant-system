@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 public class CartDto {
 
 
-    private int id;
+    private Long id;
     private int userid;
     private String itemName;
     private int quantity;
