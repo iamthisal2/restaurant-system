@@ -37,6 +37,8 @@ public class UserService {
                 .name(savedUser.getName())
                 .email(savedUser.getEmail())
                 .role(savedUser.getRole())
+                .createdAt(savedUser.getCreatedAt())
+                .updatedAt(savedUser.getUpdatedAt())
                 .build();
     }
 
@@ -49,11 +51,14 @@ public class UserService {
             throw new RuntimeException("Invalid email or password");
         }
 
+
         return UserResponse.builder()
                 .id(user.getId())
                 .name(user.getName())
                 .email(user.getEmail())
                 .role(user.getRole())
+                .createdAt(user.getCreatedAt())
+                .updatedAt(user.getUpdatedAt())
                 .build();
     }
 
@@ -71,6 +76,8 @@ public class UserService {
                 .name(user.getName())
                 .email(user.getEmail())
                 .role(user.getRole())
+                .createdAt(user.getCreatedAt())
+                .updatedAt(user.getUpdatedAt())
                 .build();
     }
 
@@ -95,6 +102,8 @@ public class UserService {
                 .name(updatedUser.getName())
                 .email(updatedUser.getEmail())
                 .role(updatedUser.getRole())
+                .createdAt(updatedUser.getCreatedAt())
+                .updatedAt(updatedUser.getUpdatedAt())
                 .build();
     }
 

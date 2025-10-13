@@ -16,6 +16,7 @@ public class LoginApplication {
     public ModelMapper modelMapper() {
 
         return new ModelMapper();
+
     }
 
 }

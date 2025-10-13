@@ -2,6 +2,10 @@ package com.example.login.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "users")
@@ -26,4 +30,14 @@ public class User {
 
     @Column(nullable = false)
     private String role; // "USER" or "ADMIN"
+
+    // New fields
+    @Column(nullable = true, updatable = false)
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+
+    @Column(nullable = true)
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
+
 }
