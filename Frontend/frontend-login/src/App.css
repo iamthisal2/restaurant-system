@@ -139,3 +139,67 @@ button:focus,
 a:focus {
   outline: none;
 }
+/* Confirmation Modal */
+.confirm-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.4); /* semi-transparent background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.confirm-modal {
+  background: #fff;
+  padding: 30px 25px;
+  border-radius: 8px;
+  max-width: 400px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.confirm-modal p {
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.confirm-actions {
+  display: flex;
+  justify-content: space-around;
+}
+
+.confirm-actions .update-btn,
+.confirm-actions .delete-btn {
+  padding: 10px 25px;
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s;
+}
+
+.confirm-actions .update-btn {
+  background-color: #FF4C24;
+  color: white;
+}
+
+.confirm-actions .update-btn:hover {
+  background-color: #e5533c;
+}
+
+.confirm-actions .delete-btn {
+  background-color: #fff;
+  color: #FF4C24;
+  border: 1px solid #FF4C24;
+}
+
+.confirm-actions .delete-btn:hover {
+  background-color: #fff4f2;
+
+}
