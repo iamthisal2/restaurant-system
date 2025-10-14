@@ -14,10 +14,14 @@ public class UserController {
 
     private final UserService userService;
 
-    // Register endpoint
+    // Updated to send clear error messages back to frontend
     @PostMapping("/register")
-    public ResponseEntity<UserResponse> registerUser(@RequestBody RegisterRequest request) {
-        return ResponseEntity.ok(userService.register(request));
+    public ResponseEntity<?> registerUser(@RequestBody RegisterRequest request) {
+        try {
+            return ResponseEntity.ok(userService.register(request));
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(new ErrorResponse(e.getMessage()));
+        }
     }
 
     // Login endpoint
@@ -30,7 +34,7 @@ public class UserController {
     @GetMapping("/{id}")
     public ResponseEntity<UserResponse> getUser(
             @PathVariable Long id,
-            @RequestParam Long loggedInUserId // pass from frontend after login
+            @RequestParam Long loggedInUserId
     ) {
         return ResponseEntity.ok(userService.getUserById(id, loggedInUserId));
     }
@@ -39,7 +43,7 @@ public class UserController {
     @PutMapping("/{id}")
     public ResponseEntity<UserResponse> updateUser(
             @PathVariable Long id,
-            @RequestParam Long loggedInUserId, // pass from frontend after login
+            @RequestParam Long loggedInUserId,
             @RequestBody RegisterRequest request
     ) {
         return ResponseEntity.ok(userService.updateUser(id, loggedInUserId, request));
@@ -49,9 +53,12 @@ public class UserController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(
             @PathVariable Long id,
-            @RequestParam Long loggedInUserId // pass from frontend after login
+            @RequestParam Long loggedInUserId
     ) {
         userService.deleteUser(id, loggedInUserId);
         return ResponseEntity.noContent().build();
     }
+
+    // ✅ Added helper class for clean error responses
+    record ErrorResponse(String message) {}
 }

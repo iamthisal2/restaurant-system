@@ -18,6 +18,10 @@ public class UserService {
             throw new RuntimeException("Email already registered");
         }
 
+        if (!request.getPassword().equals(request.getConfirmPassword())) {
+            throw new RuntimeException("Passwords do not match");
+        }
+
         // Default role = USER if not provided
         String role = (request.getRole() == null || request.getRole().isEmpty())
                 ? "USER"
