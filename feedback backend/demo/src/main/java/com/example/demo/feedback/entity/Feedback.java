@@ -1,6 +1,9 @@
 package com.example.demo.feedback.entity;
+import com.fasterxml.jackson.annotation.JsonIgnore; 
 
 import jakarta.persistence.*;
+import java.time.LocalDate; // CHANGED
+import com.example.demo.user.entity.User;
 
 @Entity
 @Table(name = "feedbacks")
@@ -14,26 +17,38 @@ public class Feedback {
     private String content;
     private int rating;
 
-    // Default constructor is required by JPA
-    public Feedback() {}
+    @Column(name = "submitted_date") // ADDED
+    private LocalDate submittedDate;
 
-    // Constructor for creating new feedbacks
-    public Feedback(String authorName, String email, String content, int rating) {
-        this.authorName = authorName;
-        this.email = email;
-        this.content = content;
-        this.rating = rating;
-    }
+    // ADDED: Relationship to the User entity
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    @JsonIgnore 
+    private User user; // Assumes you have a 'User' entity
+
+    @OneToOne(mappedBy = "feedback", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private FeedbackResponse response;
+
+    // Default constructor
+    public Feedback() {}
 
     // Getters and Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     public String getAuthorName() { return authorName; }
     public void setAuthorName(String authorName) { this.authorName = authorName; }
-    public String getEmail() { return email; } 
-    public void setEmail(String email) { this.email = email; } 
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
     public String getContent() { return content; }
     public void setContent(String content) { this.content = content; }
     public int getRating() { return rating; }
     public void setRating(int rating) { this.rating = rating; }
+    
+    // ADDED Getters and Setters
+    public LocalDate getSubmittedDate() { return submittedDate; }
+    public void setSubmittedDate(LocalDate submittedDate) { this.submittedDate = submittedDate; }
+    public User getUser() { return user; }
+    public void setUser(User user) { this.user = user; }
+    public FeedbackResponse getResponse() { return response; }
+    public void setResponse(FeedbackResponse response) { this.response = response; }
 }

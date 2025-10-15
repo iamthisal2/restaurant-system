@@ -3,6 +3,7 @@ import { Routes, Route } from 'react-router-dom';
 import Feedback from './pages/Feedback/Feedback';
 import HomePage from './pages/HomePage/HomePage';
 import AllFeedback from './pages/AllFeedback/AllFeedback';
+import MyReservations from './pages/MyReservations/MyReservations';
 
 function App() {
   const [showFeedback, setShowFeedback] = useState(false);
@@ -27,7 +28,7 @@ function App() {
               openPanel={() => setShowAllFeedbackPanel(true)} 
             />} 
           />
-          {/* The /all-feedback route is no longer needed */}
+          <Route path='/my-reservations' element={<MyReservations />} /> 
         </Routes>
       </main>
     </>
