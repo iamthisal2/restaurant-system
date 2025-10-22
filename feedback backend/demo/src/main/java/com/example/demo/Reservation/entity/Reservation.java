@@ -1,6 +1,9 @@
 package com.example.demo.Reservation.entity;
 
 import com.example.demo.user.entity.User;
+import com.example.demo.tables.entity.Tables;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -21,10 +24,14 @@ public class Reservation {
     private String status = "Pending";
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = true)
+    @JsonIgnore
     private User user;
 
-    // ADD ALL OF THESE GETTERS AND SETTERS
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "table_id")
+    private Tables table;
+
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     public String getCustomerName() { return customerName; }
@@ -41,4 +48,7 @@ public class Reservation {
     public void setStatus(String status) { this.status = status; }
     public User getUser() { return user; }
     public void setUser(User user) { this.user = user; }
+
+    public Tables getTable() { return table; }
+    public void setTable(Tables table) { this.table = table; }
 }

@@ -9,7 +9,8 @@ public class ReservationDto {
     private LocalDate reservationDate;
     private LocalTime reservationTime;
     private int numberOfGuests;
-    private Long userId; // ADDED
+    private Long userId; 
+    private String status;
 
     // Getters and Setters
     public String getCustomerName() { return customerName; }
@@ -24,4 +25,6 @@ public class ReservationDto {
     public void setNumberOfGuests(int numberOfGuests) { this.numberOfGuests = numberOfGuests; }
     public Long getUserId() { return userId; }
     public void setUserId(Long userId) { this.userId = userId; }
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
 }

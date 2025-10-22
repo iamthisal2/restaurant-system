@@ -6,7 +6,7 @@ public class FeedbackDto {
     private String email;
     private String content;
     private int rating;
-    private Long userId; // ADDED
+    private Long userId; 
 
     // Getters and Setters
     public String getAuthorName() { return authorName; }
@@ -17,6 +17,6 @@ public class FeedbackDto {
     public void setContent(String content) { this.content = content; }
     public int getRating() { return rating; }
     public void setRating(int rating) { this.rating = rating; }
-    public Long getUserId() { return userId; } // ADDED
-    public void setUserId(Long userId) { this.userId = userId; } // ADDED
+    public Long getUserId() { return userId; } 
+    public void setUserId(Long userId) { this.userId = userId; } 
 }

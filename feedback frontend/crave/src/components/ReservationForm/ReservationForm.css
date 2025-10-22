@@ -25,7 +25,7 @@
 .reservation-form button {
     grid-column: 1 / -1; /* Make button span both columns */
     padding: 0.9rem;
-    background-color: tomato;
+    background-color: rgb(255, 119, 0);
     color: white;
     border: none;
     border-radius: 6px;
@@ -54,15 +54,26 @@
 
 .view-reservations-link {
     padding: 0.6rem 1.2rem;
-    border: 1px solid tomato;
+    border: 1px solid rgb(255, 119, 0);
     border-radius: 50px;
-    color: tomato;
+    color: rgb(255, 119, 0);
     text-decoration: none;
     font-weight: 500;
     transition: all 0.2s;
 }
 
 .view-reservations-link:hover {
-    background-color: tomato;
+    background-color: rgb(255, 119, 0);
     color: white;
+}
+
+.error-message {
+    color: #d32f2f;
+    font-size: 14px;
+    margin-top: 4px;
+    margin-bottom: 0;
+}
+
+.reservation-form input:invalid {
+    border-color: #d32f2f;
 }

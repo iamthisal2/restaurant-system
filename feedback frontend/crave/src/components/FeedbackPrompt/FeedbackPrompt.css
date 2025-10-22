@@ -25,9 +25,9 @@
 .feedback-prompt button {
   padding: 0.9rem 3rem;
   border-radius: 50px;
-  border: 1px solid tomato;
+  border: 1px solid rgb(255, 119, 0);
   background-color: transparent;
-  color: tomato;
+  color: rgb(255, 119, 0);
   font-size: 1.1rem;
   font-weight: 500;
   cursor: pointer;
@@ -36,7 +36,7 @@
 
 /* Modern hover effect for the button */
 .feedback-prompt button:hover {
-  background-color: tomato;
+  background-color: rgb(255, 119, 0);
   color: white;
   transform: scale(1.05); /* Makes the button pop */
   box-shadow: 0 4px 15px rgba(255, 99, 71, 0.4);

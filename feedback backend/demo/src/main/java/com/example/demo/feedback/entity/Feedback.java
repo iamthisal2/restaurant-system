@@ -2,7 +2,7 @@ package com.example.demo.feedback.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore; 
 
 import jakarta.persistence.*;
-import java.time.LocalDate; // CHANGED
+import java.time.LocalDate; 
 import com.example.demo.user.entity.User;
 
 @Entity
@@ -16,6 +16,7 @@ public class Feedback {
     private String email;
     private String content;
     private int rating;
+    private String adminResponse;
 
     @Column(name = "submitted_date") // ADDED
     private LocalDate submittedDate;
@@ -51,4 +52,16 @@ public class Feedback {
     public void setUser(User user) { this.user = user; }
     public FeedbackResponse getResponse() { return response; }
     public void setResponse(FeedbackResponse response) { this.response = response; }
+    
+    public String getDisplayAdminResponse() {
+        if (adminResponse != null && !adminResponse.trim().isEmpty()) {
+            return adminResponse;
+        }
+        if (response != null && response.getResponseText() != null) {
+            return response.getResponseText();
+        }
+        return null;
+    }
+
+
 }
