@@ -1,6 +1,5 @@
 package com.example.login.service;
 
-import com.example.login.dto.*;
 import com.example.login.entity.User;
 import com.example.login.repo.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -8,19 +7,17 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class UserService {
+public class UserServiceImpl {
 
     private final UserRepository userRepository;
 
     // Register new user
-    public UserResponse register(RegisterRequest request) {
+    public User register(User request) { // ✅ using entity instead of missing DTOs
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
             throw new RuntimeException("Email already registered");
         }
 
-        if (!request.getPassword().equals(request.getConfirmPassword())) {
-            throw new RuntimeException("Passwords do not match");
-        }
+        // ✅ Removed confirmPassword check
 
         // Default role = USER if not provided
         String role = (request.getRole() == null || request.getRole().isEmpty())
@@ -34,20 +31,11 @@ public class UserService {
                 .role(role)
                 .build();
 
-        User savedUser = userRepository.save(user);
-
-        return UserResponse.builder()
-                .id(savedUser.getId())
-                .name(savedUser.getName())
-                .email(savedUser.getEmail())
-                .role(savedUser.getRole())
-                .createdAt(savedUser.getCreatedAt())
-                .updatedAt(savedUser.getUpdatedAt())
-                .build();
+        return userRepository.save(user);
     }
 
     // Login user
-    public UserResponse login(LoginRequest request) {
+    public User login(User request) {
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new RuntimeException("Invalid email or password"));
 
@@ -55,38 +43,21 @@ public class UserService {
             throw new RuntimeException("Invalid email or password");
         }
 
-
-        return UserResponse.builder()
-                .id(user.getId())
-                .name(user.getName())
-                .email(user.getEmail())
-                .role(user.getRole())
-                .createdAt(user.getCreatedAt())
-                .updatedAt(user.getUpdatedAt())
-                .build();
+        return user;
     }
 
-    // READ - get own account
-    public UserResponse getUserById(Long id, Long loggedInUserId) {
+    // GET own account
+    public User getUserById(Long id, Long loggedInUserId) {
         if (!id.equals(loggedInUserId)) {
             throw new RuntimeException("Access denied: You can only view your own account");
         }
 
-        User user = userRepository.findById(id)
+        return userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
-
-        return UserResponse.builder()
-                .id(user.getId())
-                .name(user.getName())
-                .email(user.getEmail())
-                .role(user.getRole())
-                .createdAt(user.getCreatedAt())
-                .updatedAt(user.getUpdatedAt())
-                .build();
     }
 
-    // UPDATE - update own account
-    public UserResponse updateUser(Long id, Long loggedInUserId, RegisterRequest request) {
+    // UPDATE own account
+    public User updateUser(Long id, Long loggedInUserId, User request) {
         if (!id.equals(loggedInUserId)) {
             throw new RuntimeException("Access denied: You can only update your own account");
         }
@@ -99,19 +70,10 @@ public class UserService {
         user.setPassword(request.getPassword());
         user.setRole(request.getRole() != null ? request.getRole() : user.getRole());
 
-        User updatedUser = userRepository.save(user);
-
-        return UserResponse.builder()
-                .id(updatedUser.getId())
-                .name(updatedUser.getName())
-                .email(updatedUser.getEmail())
-                .role(updatedUser.getRole())
-                .createdAt(updatedUser.getCreatedAt())
-                .updatedAt(updatedUser.getUpdatedAt())
-                .build();
+        return userRepository.save(user);
     }
 
-    // DELETE - delete own account
+    // DELETE own account
     public void deleteUser(Long id, Long loggedInUserId) {
         if (!id.equals(loggedInUserId)) {
             throw new RuntimeException("Access denied: You can only delete your own account");

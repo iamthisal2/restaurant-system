@@ -1,6 +1,6 @@
 package com.example.login.controller;
 
-import com.example.login.dto.*;
+import com.example.login.entity.User; // ✅ used for responses
 import com.example.login.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +16,7 @@ public class UserController {
 
     // Updated to send clear error messages back to frontend
     @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@RequestBody RegisterRequest request) {
+    public ResponseEntity<?> registerUser(@RequestBody User request) {
         try {
             return ResponseEntity.ok(userService.register(request));
         } catch (RuntimeException e) {
@@ -26,7 +26,7 @@ public class UserController {
 
     // Login endpoint
     @PostMapping("/login")
-    public ResponseEntity<UserResponse> loginUser(@RequestBody LoginRequest request) {
+    public ResponseEntity<UserResponse> loginUser(@RequestBody User request) {
         return ResponseEntity.ok(userService.login(request));
     }
 
@@ -59,6 +59,6 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
-    // ✅ Added helper class for clean error responses
+    // Added helper class for clean error responses
     record ErrorResponse(String message) {}
 }
