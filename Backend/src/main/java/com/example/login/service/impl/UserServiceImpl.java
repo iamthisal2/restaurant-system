@@ -1,23 +1,26 @@
 package com.example.login.service.impl;
 
+
+
 import com.example.login.dto.request.auth.UpdateRegisterRequest;
 import com.example.login.dto.response.Response;
-import com.example.login.dto.response.UserResponse;
+import com.example.login.dto.response.user.UserResponse;
 import com.example.login.entity.User;
 import com.example.login.enums.Role;
 import com.example.login.repo.UserRepository;
 import com.example.login.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public Response<List<UserResponse>> getAllUsers() {
@@ -28,11 +31,12 @@ public class UserServiceImpl implements UserService{
                             .name(user.getName())
                             .email(user.getEmail())
                             .role(user.getRole().name())
+                            .enabled(!user.isDisabled())
                             .createdDate(user.getCreatedDate())
                             .build())
                     .toList();
 
-            if (users.isEmpty()) {
+            if(users.isEmpty()) {
                 return Response.successResponse("No users found", users);
             }
             return Response.successResponse("Users retrieved successfully", users);
@@ -62,7 +66,7 @@ public class UserServiceImpl implements UserService{
             User user = userRepository.findById(userId)
                     .orElseThrow(() -> new RuntimeException("User not found"));
 
-            if (request.getName() != null && !request.getName().isEmpty()) {
+            if(request.getName() != null && !request.getName().isEmpty()) {
                 user.setName(request.getName());
             }
 
@@ -70,6 +74,9 @@ public class UserServiceImpl implements UserService{
                 user.setEmail(request.getEmail());
             }
 
+            if (request.getPassword() != null && !request.getPassword().isEmpty()) {
+                user.setPassword(passwordEncoder.encode(request.getPassword()));
+            }
 
             User updatedUser = userRepository.save(user);
 
@@ -78,6 +85,7 @@ public class UserServiceImpl implements UserService{
                     .name(updatedUser.getName())
                     .email(updatedUser.getEmail())
                     .role(updatedUser.getRole().name())
+                    .enabled(!updatedUser.isDisabled())
                     .createdDate(updatedUser.getCreatedDate())
                     .build();
 
@@ -106,12 +114,35 @@ public class UserServiceImpl implements UserService{
         }
     }
 
+    @Override
+    public Response<UserResponse> disableUser(Long userId) {
+        try {
+            User user = userRepository.findById(userId)
+                    .orElseThrow(() -> new RuntimeException("User not found"));
 
+            user.setDisabled(!user.isDisabled());
+            User disabledUser = userRepository.save(user);
+
+            UserResponse userResponse = UserResponse.builder()
+                    .id(disabledUser.getId())
+                    .name(disabledUser.getName())
+                    .email(disabledUser.getEmail())
+                    .role(disabledUser.getRole().name())
+                    .enabled(!disabledUser.isDisabled())
+                    .createdDate(disabledUser.getCreatedDate())
+                    .build();
+
+            return Response.successResponse("User disabled successfully", userResponse);
+        } catch (Exception e) {
+            return Response.errorResponse("Failed to disable user: " + e.getMessage());
+        }
+    }
 
     @Override
     public Response<UserResponse> createUser(UpdateRegisterRequest request) {
         try {
-            if (request.getEmail() != null && !request.getEmail().isEmpty()) {
+
+            if(request.getEmail() != null && !request.getEmail().isEmpty()) {
                 if (userRepository.existsByEmail(request.getEmail())) {
                     return Response.errorResponse("Email is already in use");
                 }
@@ -120,8 +151,9 @@ public class UserServiceImpl implements UserService{
             User newUser = User.builder()
                     .name(request.getName())
                     .email(request.getEmail())
-                    .password(request.getPassword())
+                    .password(passwordEncoder.encode(request.getPassword()))
                     .role(Role.USER)
+                    .isDisabled(false)
                     .build();
 
             User savedUser = userRepository.save(newUser);

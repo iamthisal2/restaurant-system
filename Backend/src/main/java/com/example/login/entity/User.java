@@ -1,10 +1,9 @@
 package com.example.login.entity;
 
+
+import com.example.login.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
 import java.time.LocalDateTime;
 
 @Entity
@@ -28,16 +27,35 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false)
-    private String role; // "USER" or "ADMIN"
+    @Enumerated(EnumType.STRING)
+    private Role role; // "USER" or "ADMIN"
 
-    // New fields
-    @Column(nullable = true, updatable = false)
-    @CreationTimestamp
-    private LocalDateTime createdAt;
+    private boolean isDisabled =  false;
 
-    @Column(nullable = true)
-    @UpdateTimestamp
-    private LocalDateTime updatedAt;
+    private LocalDateTime createdDate;
 
+    private LocalDateTime updatedDate;
+
+    @PrePersist
+    public void prePersist() {
+        this.createdDate = LocalDateTime.now();
+        this.updatedDate = LocalDateTime.now();
+    }
+
+
+    @PreUpdate
+    public void preUpdate() {
+        this.updatedDate = LocalDateTime.now();
+    }
+
+//    public  User(Long id, String name, String email, String password, Role role) {
+//        this.id = id;
+//        this.name = name;
+//        this.email = email;
+//        this.password = password;
+//        this.role = role;
+//    }
+//
+//    public User() {}
 }
+

@@ -1,64 +1,46 @@
 package com.example.login.controller;
 
-import com.example.login.entity.User; // ✅ used for responses
+import com.example.login.config.CustomUserDetails;
+import com.example.login.dto.request.auth.UpdateRegisterRequest;
+import com.example.login.dto.response.Response;
+import com.example.login.dto.response.user.UserResponse;
 import com.example.login.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:5173")
 public class UserController {
 
     private final UserService userService;
 
-    // Updated to send clear error messages back to frontend
-    @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@RequestBody User request) {
-        try {
-            return ResponseEntity.ok(userService.register(request));
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(new ErrorResponse(e.getMessage()));
-        }
-    }
-
-    // Login endpoint
-    @PostMapping("/login")
-    public ResponseEntity<UserResponse> loginUser(@RequestBody User request) {
-        return ResponseEntity.ok(userService.login(request));
-    }
-
     // READ - get own account
-    @GetMapping("/{id}")
-    public ResponseEntity<UserResponse> getUser(
-            @PathVariable Long id,
-            @RequestParam Long loggedInUserId
-    ) {
-        return ResponseEntity.ok(userService.getUserById(id, loggedInUserId));
+    @GetMapping("/me")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    public ResponseEntity<Response<UserResponse>> getCurrentUser(@AuthenticationPrincipal CustomUserDetails userDetails) {
+        Response<UserResponse> response = userService.getMe(userDetails.getUser().getId());
+        return ResponseEntity.status(response.getStatus()).body(response);
+    }
+
+    @DeleteMapping("/disable/me")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<Response<UserResponse>> disableUser(@AuthenticationPrincipal CustomUserDetails userDetails) {
+        Response<UserResponse> response = userService.disableUser(userDetails.getUser().getId());
+        return ResponseEntity.status(response.getStatus()).body(response);
     }
 
     // UPDATE - update own account
-    @PutMapping("/{id}")
-    public ResponseEntity<UserResponse> updateUser(
-            @PathVariable Long id,
-            @RequestParam Long loggedInUserId,
-            @RequestBody RegisterRequest request
+    @PutMapping("/me")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<Response<UserResponse>> updateUser(
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            @RequestBody UpdateRegisterRequest request
     ) {
-        return ResponseEntity.ok(userService.updateUser(id, loggedInUserId, request));
+        Response<UserResponse> response = userService.updateUser(userDetails.getUser().getId(), request);
+        return ResponseEntity.status(response.getStatus()).body(response);
     }
-
-    // DELETE - delete own account
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(
-            @PathVariable Long id,
-            @RequestParam Long loggedInUserId
-    ) {
-        userService.deleteUser(id, loggedInUserId);
-        return ResponseEntity.noContent().build();
-    }
-
-    // Added helper class for clean error responses
-    record ErrorResponse(String message) {}
 }
