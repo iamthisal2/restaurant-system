@@ -1,78 +1,217 @@
-.foodtags-card {
-  max-width: 400px;
-  margin: 60px auto;
-  padding: 30px;
-  background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-  font-family: "Outfit", sans-serif;
-  color: #333;
-  text-align: center;
+/* Container */
+.foodtags-container {
+    min-height: 100vh;
+    padding: 32px 16px;
+    background-color: #f9fafb;
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
 }
 
-.foodtags-card h2 {
-  margin-bottom: 20px;
+/* Main box */
+.foodtags-box {
+    max-width: 900px;
+    width: 100%;
+    background-color: #fff;
+    padding: 24px;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
 
-.tag-add {
-  display: flex;
-  gap: 10px;
-  justify-content: center;
-  margin-bottom: 20px;
+/* Header */
+.foodtags-header h1 {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 8px;
 }
 
-.tag-add input {
-  padding: 8px;
-  border-radius: 4px;
-  border: 1px solid #ccc;
+.foodtags-header p {
+    color: #6b7280;
+    margin-bottom: 16px;
 }
 
-.tag-add button {
-  padding: 8px 15px;
-  background: #FF4C24;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
+/* Error */
+.foodtags-error {
+    background-color: #fef2f2;
+    border: 1px solid #fbcaca;
+    color: #b91c1c;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 16px;
 }
 
-.tag-add button:hover {
-  background: #e5533c;
+/* Add new tag */
+.foodtags-add h2 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 8px;
 }
 
-.tag-list {
-  list-style: none;
-  padding: 0;
+.foodtags-add-controls {
+    display: flex;
+    gap: 12px;
 }
 
-.tag-list li {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 10px;
+.foodtags-add-controls input {
+    flex: 1;
+    padding: 10px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
 }
 
-.tag-text {
-  flex: 1;        /* takes available space */
-  text-align: left;
+.foodtags-add-controls button {
+    padding: 10px 16px;
+    border-radius: 8px;
+    border: none;
+    background-color: #f97316;
+    color: #fff;
+    font-weight: 600;
+    cursor: pointer;
 }
 
-.tag-list input.edit-input {
-  flex: 1;        /* same width as text */
-  padding: 5px;
-  border-radius: 4px;
-  border: 1px solid #ccc;
+.foodtags-add-controls button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
 }
 
-.tag-list button {
-  padding: 4px 8px;
-  border-radius: 4px;
-  border: 1px solid #FF4C24;
-  background: white;
-  color: #FF4C24;
-  cursor: pointer;
+.foodtags-add-controls button:hover:not(:disabled) {
+    background-color: #ea580c;
 }
 
-.tag-list button:hover {
-  background: #fff4f2;
+/* Loading spinner */
+.foodtags-loading {
+    text-align: center;
+    padding: 32px 0;
 }
+
+.spinner {
+    width: 32px;
+    height: 32px;
+    border: 3px solid #f97316;
+    border-top-color: transparent;
+    border-radius: 50%;
+    margin: 0 auto 8px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Empty state */
+.foodtags-empty {
+    text-align: center;
+    padding: 32px 0;
+}
+
+.foodtags-empty img {
+    width: 64px;
+    height: 64px;
+    margin-bottom: 12px;
+    opacity: 0.5;
+}
+
+.foodtags-empty h3 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.foodtags-empty p {
+    color: #6b7280;
+}
+
+/* Tags grid */
+.foodtags-list h2 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+.foodtags-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill,minmax(200px,1fr));
+    gap: 12px;
+}
+
+.foodtag-item {
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 12px;
+    background-color: #fff;
+    transition: box-shadow 0.2s;
+}
+
+.foodtag-item:hover {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+/* Edit mode */
+.foodtag-edit input {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    margin-bottom: 8px;
+}
+
+.foodtag-edit-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.foodtag-edit-buttons button {
+    flex: 1;
+    padding: 8px 0;
+    border-radius: 6px;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.foodtag-edit-buttons button:first-child {
+    background-color: #f97316;
+    color: #fff;
+}
+
+.foodtag-edit-buttons button:first-child:hover:not(:disabled) {
+    background-color: #ea580c;
+}
+
+.foodtag-edit-buttons button:last-child {
+    background-color: #e5e7eb;
+    color: #374151;
+}
+
+.foodtag-edit-buttons button:last-child:hover {
+    background-color: #d1d5db;
+}
+
+/* Display mode */
+.foodtag-display {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.foodtag-display span {
+    font-weight: 500;
+}
+
+.foodtag-actions button {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.foodtag-actions button:hover {
+    background-color: rgba(0,0,0,0.05);
+}
+
+.foodtag-actions button:disabled {
+    opacity: 0.

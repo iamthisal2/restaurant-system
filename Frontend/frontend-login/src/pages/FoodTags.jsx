@@ -1,118 +1,199 @@
 import { useState, useEffect } from "react";
-import { useAuth } from "../context/AuthContext";
-import { getFoodTags, addFoodTag, updateFoodTag, deleteFoodTag } from "../api";
-import "./FoodTags.css";
+import { useAuth } from "../Context/AuthContext";
+import * as foodTagService from "../services/foodTag.service";
+import { assets } from "../assets/assets";
+import { Pencil, Trash2 } from "lucide-react";
+import './FoodTags.css';
 
 export default function FoodTags() {
-  const { user } = useAuth();
+  const { currentUser, isAuthenticated } = useAuth();
   const [tags, setTags] = useState([]);
   const [newTag, setNewTag] = useState("");
   const [editId, setEditId] = useState(null);
   const [editTag, setEditTag] = useState("");
-  const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (user) {
-      fetchTags();
-      setMessage("");
+    if (isAuthenticated && currentUser) {
+      fetchTags().then();
     } else {
       setTags([]);
-      setMessage("You must log in to manage food tags.");
     }
-  }, [user]);
+  }, [isAuthenticated, currentUser]);
 
   const fetchTags = async () => {
+    setLoading(true);
+    setError(null);
     try {
-      const res = await getFoodTags(user.id);
-      setTags(res.data);
+      const response = await foodTagService.getFoodTagsForUser(currentUser.id);
+      if (response && response.data) setTags(response.data);
     } catch (err) {
+      setError("Failed to fetch tags");
       console.error("Failed to fetch tags:", err);
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleAdd = async () => {
-    if (!user) {
-      setMessage("⚠️ Please log in before adding tags.");
+    if (!isAuthenticated || !currentUser) {
+      setError("Please log in before adding tags.");
       return;
     }
-    if (!newTag) return;
+    if (!newTag.trim()) {
+      setError("Please enter a tag name");
+      return;
+    }
 
+    setLoading(true);
+    setError(null);
     try {
-      await addFoodTag({ userId: user.id, tag: newTag });
-      setNewTag("");
-      fetchTags();
+      const response = await foodTagService.addFoodTag({ userId: currentUser.id, tag: newTag.trim() });
+      if (response && response.success) {
+        setNewTag("");
+        await fetchTags();
+      } else setError("Failed to add tag");
     } catch (err) {
       console.error("Failed to add tag:", err);
-      setMessage("❌ Could not add tag. Try again.");
+      setError("Failed to add tag. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleUpdate = async (id) => {
-    if (!editTag) return;
+    if (!editTag.trim()) {
+      setError("Please enter a tag name");
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
     try {
-      await updateFoodTag(id, { tag: editTag });
-      setEditId(null);
-      setEditTag("");
-      fetchTags();
+      const response = await foodTagService.updateFoodTag(id, { tag: editTag.trim() });
+      if (response && response.success) {
+        setEditId(null);
+        setEditTag("");
+        await fetchTags();
+      } else setError("Failed to update tag");
     } catch (err) {
       console.error("Failed to update tag:", err);
+      setError("Failed to update tag");
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleDelete = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this tag?")) return;
+
+    setLoading(true);
+    setError(null);
     try {
-      await deleteFoodTag(id);
-      fetchTags();
+      const response = await foodTagService.deleteFoodTag(id);
+      if (response && response.success) await fetchTags();
+      else setError("Failed to delete tag");
     } catch (err) {
       console.error("Failed to delete tag:", err);
+      setError("Failed to delete tag");
+    } finally {
+      setLoading(false);
     }
   };
 
-  return (
-    <div className="foodtags-card">
-      <h2>My Food Tags</h2>
-
-      {message && <p className="info-msg">{message}</p>}
-
-      <div className="tag-add">
-        <input
-          placeholder="New tag (e.g. Spicy)"
-          value={newTag}
-          onChange={(e) => setNewTag(e.target.value)}
-        />
-        <button onClick={handleAdd}>Add</button>
+  if (!isAuthenticated) {
+    return (
+      <div className="foodtags-login-required">
+        <div className="login-box">
+          <h2>Login Required</h2>
+          <p>Please login to manage your food tags</p>
+          <a href="/login">Login</a>
+        </div>
       </div>
+    );
+  }
 
-      <ul className="tag-list">
-        {tags.map((t) => (
-          <li key={t.id}>
-            {editId === t.id ? (
-              <>
-                <input
-                  className="edit-input"
-                  value={editTag}
-                  onChange={(e) => setEditTag(e.target.value)}
-                />
-                <button onClick={() => handleUpdate(t.id)}>Save</button>
-                <button onClick={() => setEditId(null)}>Cancel</button>
-              </>
-            ) : (
-              <>
-                <div className="tag-text">{t.tag}</div>
-                <button
-                  onClick={() => {
-                    setEditId(t.id);
-                    setEditTag(t.tag);
-                  }}
-                >
-                  Edit
-                </button>
-                <button onClick={() => handleDelete(t.id)}>Delete</button>
-              </>
-            )}
-          </li>
-        ))}
-      </ul>
+  return (
+    <div className="foodtags-container">
+      <div className="foodtags-box">
+        <div className="foodtags-header">
+          <h1>My Food Tags</h1>
+          <p>Manage your personal food preferences and tags</p>
+        </div>
+
+        {error && <div className="foodtags-error">{error}</div>}
+
+        {/* Add New Tag */}
+        <div className="foodtags-add">
+          <h2>Add New Tag</h2>
+          <div className="foodtags-add-controls">
+            <input
+              type="text"
+              placeholder="New tag (e.g. Spicy, Vegetarian, Favorite)"
+              value={newTag}
+              onChange={(e) => setNewTag(e.target.value)}
+              onKeyPress={(e) => e.key === 'Enter' && handleAdd()}
+              disabled={loading}
+            />
+            <button onClick={handleAdd} disabled={loading || !newTag.trim()}>
+              {loading ? "Adding..." : "Add Tag"}
+            </button>
+          </div>
+        </div>
+
+        {/* Tags List */}
+        {loading && tags.length === 0 ? (
+          <div className="foodtags-loading">
+            <div className="spinner"></div>
+            <p>Loading tags...</p>
+          </div>
+        ) : tags.length === 0 ? (
+          <div className="foodtags-empty">
+            <img src={assets.basket_icon} alt="No tags" />
+            <h3>No tags yet</h3>
+            <p>Add some tags to organize your food preferences!</p>
+          </div>
+        ) : (
+          <div className="foodtags-list">
+            <h2>Your Tags</h2>
+            <div className="foodtags-grid">
+              {tags.map(tag => (
+                <div key={tag.id} className="foodtag-item">
+                  {editId === tag.id ? (
+                    <div className="foodtag-edit">
+                      <input
+                        type="text"
+                        value={editTag}
+                        onChange={(e) => setEditTag(e.target.value)}
+                        disabled={loading}
+                      />
+                      <div className="foodtag-edit-buttons">
+                        <button onClick={() => handleUpdate(tag.id)} disabled={loading || !editTag.trim()}>
+                          {loading ? "Saving..." : "Save"}
+                        </button>
+                        <button onClick={() => { setEditId(null); setEditTag(""); }}>Cancel</button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="foodtag-display">
+                      <span>{tag.tag}</span>
+                      <div className="foodtag-actions">
+                        <button onClick={() => { setEditId(tag.id); setEditTag(tag.tag); }} title="Edit tag">
+                          <Pencil size={20}/>
+                        </button>
+                        <button onClick={() => handleDelete(tag.id)} disabled={loading} title="Delete tag">
+                          <Trash2 size={20}/>
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

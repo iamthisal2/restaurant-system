@@ -1,36 +1,44 @@
 import { useState, useEffect } from "react";
-import { updateUser } from "../api";
-import { useAuth } from "../context/AuthContext";
+import { updateMe } from "../services/user.service";
+import { useAuth } from "../Context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { showSuccessToast, showErrorToast } from "../utils/toast.utils";
 import "./Auth.css";
 
 export default function UpdateUser() {
-  const { user, setUser } = useAuth();
+  const { currentUser, setCurrentUser } = useAuth();
   const navigate = useNavigate();
   const [form, setForm] = useState({
-    name: user?.name || "",
-    email: user?.email || "",
+    name: currentUser?.name || "",
+    email: currentUser?.email || "",
     password: "",
   });
   const [msg, setMsg] = useState("");
 
-  // Redirect to login if user is not logged in
   useEffect(() => {
-    if (!user) navigate("/login");
-  }, [user, navigate]);
+    if (!currentUser) navigate("/login");
+  }, [currentUser, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await updateUser(user.id, user.id, form);
-      setUser(res.data);
-      setMsg("✅ Updated successfully!");
+      const response = await updateMe(form);
+      if (response && response.success) {
+        setCurrentUser(response.data);
+        showSuccessToast("Profile updated successfully!");
+        setMsg("✅ Updated successfully!");
+        setTimeout(() => navigate("/profile"), 1500);
+      } else {
+        showErrorToast("Update failed");
+        setMsg("❌ Update failed");
+      }
     } catch (err) {
+      showErrorToast("Update failed");
       setMsg("❌ Update failed");
     }
   };
 
-  if (!user) return null; // Prevent rendering before redirect
+  if (!currentUser) return null;
 
   return (
     <div className="auth-card update-card">
@@ -48,12 +56,12 @@ export default function UpdateUser() {
         />
         <input
           type="password"
-          placeholder="New password"
+          placeholder="New password (leave blank to keep current)"
           onChange={(e) => setForm({ ...form, password: e.target.value })}
         />
         <button type="submit">Update</button>
       </form>
-      <p className="message">{msg}</p>
+      {msg && <p className="message">{msg}</p>}
     </div>
   );
 }

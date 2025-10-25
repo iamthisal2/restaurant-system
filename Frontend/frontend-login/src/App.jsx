@@ -1,13 +1,15 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Toaster } from "react-hot-toast";
 import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
-import Register from "./pages/Register";
-import Login from "./pages/Login";
+import Register from "./pages/auth/Register.jsx";
+import Login from "./pages/auth/Login.jsx";
 import Profile from "./pages/Profile";
 import UpdateUser from "./pages/UpdateUser";
 import FoodTags from "./pages/FoodTags";
-import Admin from "./pages/Admin"; // NEW
+import AdminPanel from "./pages/AdminPanel";
 import "./App.css";
+import "./index.css";
 
 export default function App() {
   return (
@@ -20,8 +22,9 @@ export default function App() {
         <Route path="/profile" element={<Profile />} />
         <Route path="/update" element={<UpdateUser />} />
         <Route path="/food-tags" element={<FoodTags />} />
-        <Route path="/admin" element={<Admin />} /> {/* NEW */}
+        <Route path="/admin-panel" element={<AdminPanel />} />
       </Routes>
+      <Toaster />
     </BrowserRouter>
   );
 }
