@@ -1,0 +1,10 @@
+package com.sliit.crave.repo;
+
+import com.sliit.crave.entity.Food;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface FoodRepository extends JpaRepository<Food, Long> {
+    // You can add custom queries later if needed
+}
