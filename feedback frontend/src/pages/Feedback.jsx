@@ -4,7 +4,7 @@ import * as feedbackService from '../services/feedback.service';
 import { assets } from '../assets/assets';
 
 const Feedback = () => {
-    const { currentUser, isAuthenticated } = useAuth();
+    const { currentUser } = useAuth();
     const [feedbacks, setFeedbacks] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -16,10 +16,10 @@ const Feedback = () => {
     });
 
     useEffect(() => {
-        if (isAuthenticated && currentUser) {
+        if (currentUser) {
             fetchMyFeedbacks().then();
         }
-    }, [isAuthenticated, currentUser]);
+    }, [currentUser]);
 
     const fetchMyFeedbacks = async () => {
         setLoading(true);
@@ -119,6 +119,8 @@ const Feedback = () => {
 
         });
     };
+
+    
 
     if (loading && !showCreateForm) {
         return (

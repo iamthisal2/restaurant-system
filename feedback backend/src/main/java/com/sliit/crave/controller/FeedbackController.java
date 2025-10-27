@@ -33,8 +33,8 @@ public class FeedbackController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<Response<List<FeedbackDTO>>> getFeedBacksByUser(@AuthenticationPrincipal CustomUserDetails userDetails) {
-        Response<List<FeedbackDTO>> response = feedbackService.getFeedBacksByUserId(userDetails.getUser().getId());
+    public ResponseEntity<Response<List<FeedbackDTO>>> getFeedBacksByUser(@PathVariable Long feedbackId) {
+        Response<List<FeedbackDTO>> response = feedbackService.getFeedBacksByUserId(feedbackId);
         return new ResponseEntity<>(response, response.getStatus());
     }
 

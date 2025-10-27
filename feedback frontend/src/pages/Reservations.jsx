@@ -4,7 +4,7 @@ import * as reservationService from '../services/reservation.service';
 
 
 const Reservations = () => {
-    const { currentUser, isAuthenticated } = useAuth();
+    const {currentUser} = useAuth();
     const [reservations, setReservations] = useState([]);
     const [tables, setTables] = useState([]);
     const [availableTables, setAvailableTables] = useState([]);
@@ -22,11 +22,11 @@ const Reservations = () => {
     });
 
     useEffect(() => {
-        if (isAuthenticated && currentUser) {
+        if (currentUser) {
             fetchMyReservations().then();
             fetchTables().then();
         }
-    }, [isAuthenticated, currentUser]);
+    }, [currentUser]);
 
     const fetchMyReservations = async () => {
         setLoading(true);
@@ -227,19 +227,7 @@ const Reservations = () => {
         return availableTables.some(table => table.id === tableId);
     };
 
-    if (!isAuthenticated) {
-        return (
-            <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-                <div className="bg-white p-8 rounded-xl shadow-lg text-center max-w-md w-full">
-                    <div className="w-20 h-20 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <span className="text-2xl">🍽️</span>
-                    </div>
-                    <h2 className="text-2xl font-bold text-gray-800 mb-4">Login Required</h2>
-                    <p className="text-gray-600 mb-6">Please login to make table reservations</p>
-                </div>
-            </div>
-        );
-    }
+    
 
     if (loading && !showCreateForm) {
         return (

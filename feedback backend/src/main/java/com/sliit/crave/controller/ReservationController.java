@@ -42,8 +42,8 @@ public class ReservationController {
 
     // Endpoint for a customer to get their own reservations
     @GetMapping("/my-reservations")
-    public ResponseEntity<Response<List<ReservationResponse>>> getMyReservations(@AuthenticationPrincipal CustomUserDetails userDetails) {
-        Response<List<ReservationResponse>> response = reservationService.getAllReservationsByCustomerId(userDetails.getUser().getId());
+    public ResponseEntity<Response<List<ReservationResponse>>> getMyReservations(@PathVariable Long customerId) {
+        Response<List<ReservationResponse>> response = reservationService.getAllReservationsByCustomerId(customerId);
         return ResponseEntity.status(response.getStatus()).body(response);
     }
 

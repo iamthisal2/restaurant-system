@@ -109,6 +109,16 @@ public class FeedbackServiceImpl implements FeedBackService {
     }
 
     @Override
+    public Response<List<FeedbackDTO>> getFeedBacksByUserId(Long userId) {
+        try {
+            List<Feedback> feedbacks = feedbackRepository.findByUserId(userId);
+            return getListResponse(feedbacks);
+        } catch (Exception e) {
+            return Response.errorResponse("Failed to retrieve feedbacks: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Override
     public Response<FeedbackDTO> updateFeedback(Long id, FeedbackRequest feedbackDto) {
         try {
             Feedback existing = feedbackRepository.findById(id)
@@ -196,15 +206,7 @@ public class FeedbackServiceImpl implements FeedBackService {
         }
     }
 
-    @Override
-    public Response<List<FeedbackDTO>> getFeedBacksByUserId(Long userId) {
-        try {
-            List<Feedback> feedbacks = feedbackRepository.findByUserId(userId);
-            return getListResponse(feedbacks);
-        } catch (Exception e) {
-            return Response.errorResponse("Failed to retrieve feedbacks: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
+    
 
     private Response<List<FeedbackDTO>> getListResponse(List<Feedback> feedbacks) {
         List<FeedbackDTO> feedbackResponses = feedbacks.stream()

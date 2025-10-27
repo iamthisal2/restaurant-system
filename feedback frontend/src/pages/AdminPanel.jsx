@@ -1,20 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { useAdmin } from '../Context/AdminContext';
 import AdminLayout from '../components/AdminLayout';
-import Dashboard from '../components/admin/Dashboard';
+
+
 import FeedbackManagement from '../components/admin/FeedbackManagement';
 import ReservationManagement from '../components/admin/ReservationManagement';
 
 const AdminPanel = () => {
     const [activeTab, setActiveTab] = useState('dashboard');
-    const { isAdmin, fetchFeedbacks, fetchReservations, } = useAdmin();
+    const { isAdmin, fetchFeedbacks, fetchReservations} = useAdmin();
 
     // Track which data has been fetched to avoid refetching
     const [fetchedData, setFetchedData] = useState({
-        
+        users: false,
+        foods: false,
+        ratings: false,
         feedbacks: false,
         reservations: false,
-        
+        orders: false
     });
 
     // Fetch data based on active tab
@@ -35,25 +38,10 @@ const AdminPanel = () => {
                         setFetchedData(prev => ({ ...prev, reservations: true }));
                     }
                     break;
-               
-                case 'dashboard':
-                    // For dashboard, fetch all data if not already fetched
-                    { const promises = [];
-                    
-                    if (!fetchedData.feedbacks) {
-                        promises.push(fetchFeedbacks());
-                        setFetchedData(prev => ({ ...prev, feedbacks: true }));
-                    }
-                    if (!fetchedData.reservations) {
-                        promises.push(fetchReservations());
-                        setFetchedData(prev => ({ ...prev, reservations: true }));
-                    }
-                    if (promises.length > 0) {
-                        await Promise.all(promises);
-                    }
-                    break; }
-                default:
-                    break;
+                
+                
+                
+    
             }
         };
 
@@ -67,6 +55,9 @@ const AdminPanel = () => {
     const handleRefresh = async () => {
         // Reset fetched data and refetch current tab data
         setFetchedData({
+            users: false,
+            foods: false,
+            ratings: false,
             feedbacks: false,
             reservations: false
         });
@@ -91,14 +82,12 @@ const AdminPanel = () => {
 
     const renderContent = () => {
         switch (activeTab) {
-            case 'dashboard':
-                return <Dashboard />;
+            
             case 'feedbacks':
                 return <FeedbackManagement />;
             case 'reservations':
                 return <ReservationManagement />;
-            default:
-                return <Dashboard />;
+            
         }
     };
 
@@ -110,6 +99,10 @@ const AdminPanel = () => {
                     <div className="flex justify-between items-center">
                         <h1 className="text-2xl font-bold text-gray-900">
                             {activeTab === 'dashboard' ? 'Dashboard' : 
+                             activeTab === 'users' ? 'User Management' :
+                             activeTab === 'foods' ? 'Food Management' :
+                             activeTab === 'orders' ? 'Order Management' :
+                             activeTab === 'ratings' ? 'Rating Management' :
                              activeTab === 'feedbacks' ? 'Feedback Management' :
                              activeTab === 'reservations' ? 'Reservation Management' : 'Admin Panel'}
                         </h1>

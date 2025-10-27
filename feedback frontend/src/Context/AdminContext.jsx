@@ -1,9 +1,10 @@
 import React, { createContext, useContext, useState, useCallback } from 'react';
 import { useAuth } from './AuthContext';
 import * as adminService from '../services/admin.service';
+
 import * as feedbackService from '../services/feedback.service';
 import * as reservationService from '../services/reservation.service';
-import { createToast } from '../utils/toast.utils';
+import { createToast } from "../utils/toast.utils";
 
 
 const AdminContext = createContext();
@@ -14,9 +15,9 @@ export const AdminProvider = ({ children }) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    // Data states
     const [feedbacks, setFeedbacks] = useState([]);
     const [reservations, setReservations] = useState([]);
+
 
     // Feedback Management
     const fetchFeedbacks = useCallback(async () => {
@@ -114,7 +115,7 @@ export const AdminProvider = ({ children }) => {
         }
     };
 
-   
+    
     const createReservationByAdmin = async (reservationData) => {
         setLoading(true);
         try {
@@ -140,9 +141,12 @@ export const AdminProvider = ({ children }) => {
         loading,
         error,
         setError,
+       
         feedbacks,
         reservations,
         isAdmin,
+        // User management
+        
         // Feedback management
         fetchFeedbacks,
         deleteFeedback,
@@ -151,6 +155,7 @@ export const AdminProvider = ({ children }) => {
         fetchReservations,
         updateReservationStatus,
         deleteReservation,
+       
         //Reservation management
         createReservationByAdmin
     };
